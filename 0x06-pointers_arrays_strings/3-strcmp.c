@@ -1,23 +1,25 @@
 #include "main.h"
 /**
- * *_strncpy - find the length of a string
- * @dest: pointer to the string
- * @src: pointer
- * @n: int
- * Return: destination
+ * _strcmp - compares two strings
+ * @s1: string 1
+ * @s2: string 2
+ * Return: 0 if matching, and ns1 - ns2 if not matching
 */
 
-
-char *_strncpy(char *dest, char *src, int n)
+int _strcmp(char *s1, char *s2)
 {
 	int i;
 
-	for (i = 0; i < n && src[i] != '\0'; i++)
-		dest[i] = src[i];
+	/**
+	 * We have reached the end of S1 OR we have reached the end of S2
+	*/
 
-	for ( ; i < n; i++)
-		dest[i] = '\0';
-
-	return (dest);
+	for (i = 0; s1[i] != '\0' || s2[i] != '\0'; i++)
+	{
+		if (s1[i] != s2[i])
+		{
+			return (s1[i] - s2[i]);
+		}
+	}
+	return (0);
 }
-
