@@ -1,47 +1,52 @@
 #include "main.h"
 
 /**
- * compare - compare head and tail indices for match
- * @head: index starting from left of string
- * @tail: index starting from right of string, moving backwards
- * Return: 1 if palindrome, 0 if not
+ * last_index - returns the last index of a string (counts the null char)
+ * @s: pointer the string
+ * Return: int
  */
 
-int compare(char *head, char *tail)
+int last_index(char *s)
 {
+	int n = 0;
 
-	if (head >= tail)
-		return (1);
-	if (*head == *tail)
-		return (compare(head + 1, tail - 1));
+	if (*s > '\0')
+		n += last_index(s + 1) + 1;
 
-	return (0);
+	return (n);
 }
 
 /**
- * _strlen - find length of string to access last index
- * @s: string
- * Return: length
- */
-
-int _strlen(char *s)
-{
-
-	if (*s == '\0')
-		return (0);
-	s++;
-	return (1 + (_strlen(s)));
-}
-
-/**
- * is_palindrome - check if palindrome
+ * is_palindrome - check if a string is a palindrome
  * @s: string to check
- * Return: 1 if palindrome, 0 if not
+ * Return: 0 or 1
  */
 
 int is_palindrome(char *s)
 {
-	int len = _strlen(s);
+	int end = last_index(s);
 
-	return (compare(s, (s + len - 1)));
+	return (check(s, 0, end - 1, end % 2));
 }
+
+/**
+ * check - checker for the palindrome
+ * @s: string
+ * @start: int moves from right to left
+ * @end: int moves from left to right
+ * @pair: int
+ * Return: 0 or 1
+ */
+
+
+int check(char *s, int start, int end, int pair)
+{
+
+	if ((start == end && pair != 0) || (start == end + 1 && pair == 0))
+		return (1);
+	else if (s[start] != s[end])
+		return (0);
+	else
+		return (check(s, start + 1, end - 1, pair));
+}
+
