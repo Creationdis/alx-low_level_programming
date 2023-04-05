@@ -1,49 +1,47 @@
 #include "main.h"
 
 /**
- * is_palindrome_helper - helper function for finding a palindrome
- * @s: int
- * @i: int
- * @c: char
- * Return: int
- *
+ * compare - compare head and tail indices for match
+ * @head: index starting from left of string
+ * @tail: index starting from right of string, moving backwards
+ * Return: 1 if palindrome, 0 if not
  */
-int is_palindrome_helper(char *c, int s, int i)
+
+int compare(char *head, char *tail)
 {
-	if (s == i)
+
+	if (head >= tail)
 		return (1);
-	if (c[s] != c[i])
-		return (0);
-	if (s < i + 1)
-		return (is_palindrome_helper(c, s + 1, i - 1));
-	return (1);
+	if (*head == *tail)
+		return (compare(head + 1, tail - 1));
+
+	return (0);
 }
 
 /**
- * getLen - gets the length of a string
- * @s: char string
- *
- * Return: int 
+ * _strlen - find length of string to access last index
+ * @s: string
+ * Return: length
  */
-int getLen(char *s)
+
+int _strlen(char *s)
 {
+
 	if (*s == '\0')
 		return (0);
-
-	return (1 + getLen(s + 1));
+	s++;
+	return (1 + (_strlen(s)));
 }
 
 /**
- * is_palindrome -  returns 1 if a string is a palindrome and 0 if not
- * @s: pointer to char
- *
- * Return: returns in 1 if palindrome 0 if not
+ * is_palindrome - check if palindrome
+ * @s: string to check
+ * Return: 1 if palindrome, 0 if not
  */
+
 int is_palindrome(char *s)
 {
-	int val = getLen(s);
+	int len = _strlen(s);
 
-	if (val == 0)
-		return (1);
-	return (is_palindrome_helper(s, 0, val - 1));
+	return (compare(s, (s + len - 1)));
 }
