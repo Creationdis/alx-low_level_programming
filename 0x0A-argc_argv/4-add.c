@@ -5,12 +5,14 @@
  * main - a program that adds positive numbers.
  * @argc: argument count
  * @argv: argument vector
+ *
  * Return: 0
  */
 int main(int argc, char **argv)
 {
 	int i, j, sum = 0;
 	char *flag;
+
 	if (argc < 2)
 	{
 		printf("0\n");
@@ -19,7 +21,7 @@ int main(int argc, char **argv)
 
 	for (i = 1; argv[i]; i++)
 	{
-		n = strtol(argv[i], &flag, 10);
+		j = strtol(argv[i], &flag, 10);
 		if (*flag)
 		{
 			printf("Error\n");
