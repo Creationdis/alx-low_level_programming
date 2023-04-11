@@ -1,55 +1,32 @@
 #include "main.h"
+#include <stdlib.h>
 
 /**
- * _strlen - length of a string
- * @s: input char
- * Return: length of a string
+ * _strdup - returns a pointer to a newly allocated space in memory,
+ * which contains a copy of the string given as a parameter.
+ * @str: the source string
+ *
+ * Return: returns a pointer to the duplicated string.
+ * It returns NULL if insufficient memory was available
  */
-
-int _strlen(char *s)
+char *_strdup(char *str)
 {
-	int l = 0;
+	char *copy;
+	int i, len = 0;
 
-	while (*s != '\0')
-	{
-		s++;
-		l++;
-	}
-	return (l);
-}
+	if (str == NULL)
+		return (NULL);
 
-/**
-* str_concat - Concat 2 strings.
-* @s1: string
-* @s2: string
-* Return: char
-*/
+	while (str[len] != '\0')
+		len++;
 
-char *str_concat(char *s1, char *s2)
-{
-	unsigned int l1, l2;
-	char *conc, *tmp;
+	copy = (char *)malloc((sizeof(char) * len) + 1);
+	if (copy == NULL)
+		return (NULL);
 
-	if (!s1)
-		s1 = "";
-	else
-		l1 = _strlen(s1);
+	for (i = 0; i < len; i++)
+		copy[i] = str[i];
+	copy[len] = '\0';
 
-	if (!s2)
-		s2 = "";
-	else
-		l2 = _strlen(s2);
-
-	conc = malloc(l1 + l2 + 1);
-	if (!conc)
-		return (0);
-
-	tmp = conc;
-	while (*s1)
-		*tmp++ = *s1++;
-
-	while ((*tmp++ = *s2++))
-		;
-
-	return (conc);
+	return (copy);
 }
