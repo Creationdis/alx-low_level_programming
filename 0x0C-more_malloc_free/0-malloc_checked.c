@@ -7,7 +7,7 @@
  */
 void *malloc_checked(unsigned int b)
 {
-	void x;
+	void *x;
 
 	x = malloc(b);
 	if (x == NULL)
