@@ -27,7 +27,7 @@ return (2);
 }
 
 main_ptr = (char *) main;
-for (n = 0; i < bytes; n++)
+for (n = 0; n < bytes; n++)
 printf("%02x ", main_ptr[n] & 0xff);
 printf("\n");
 
