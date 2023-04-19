@@ -6,9 +6,9 @@
  * @argc: argument count
  * @argv: argument vector
  *
- * Return: 0 on success, 1 or 2 not correct
+ * Return: 0
  */
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
 int n, bytes;
 char *main_ptr;
@@ -33,3 +33,4 @@ printf("\n");
 
 return (0);
 }
+
