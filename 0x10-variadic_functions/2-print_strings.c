@@ -7,25 +7,27 @@
  * @n: number of strings passed to the function
  * Return: 0
 */
-void print_numbers(const char *separator, const unsigned int n, ...)
+void print_strings(const char *separator, const unsigned int n, ...)
 {
-va_list print;
-unsigned int i;
-char *c;
-va_start(print, n);
+	va_list print;
+	unsigned int counter = n, i = 0;
+	const char *spt = separator;
+	const char *string;
 
-for (i = 0; i < n; i++)
-{
-	c = va_arg(print, char*);
-	if (c != NULL)
-		printf("%s", c);
-	else
-		printf("(nil)");
+	va_start(print, n);
 
-	if (i != n - 1 && separator != NULL)
-		printf("%s", separator);
-}
-va_end(print);
+	for (; i < counter; i++)
+	{
+		string = va_arg(print, const char *);
 
-putchar('\n');
+		if (string == NULL)
+			printf("(nil)");
+		else
+			printf("%s", string);
+
+		if (spt != NULL && i != counter - 1)
+			printf("%s", spt);
+	}
+	va_end(print);
+	printf("\n");
 }
