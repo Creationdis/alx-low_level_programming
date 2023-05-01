@@ -1,47 +1,80 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include "lists.h"
 
 /**
  * print_listint_safe - Prints a listint_t linked list.
- * @head: A pointer to the head of the list.
+ * @head: A pointer to the head of the listint_t list.
  *
  * Return: The number of nodes in the list.
  */
 size_t print_listint_safe(const listint_t *head)
 {
-const listint_t *turtle, *hare;
-size_t count = 0;
+    const listint_t *slow = head, *fast = head;
+    size_t count = 0;
 
-if (!head)
-exit(98);
+    if (head == NULL)
+        exit(98);
 
-turtle = head;
-hare = head;
-while (hare && hare->next)
-{
-printf("[%p] %d\n", (void *)turtle, turtle->n);
-count++;
-turtle = turtle->next;
-hare = hare->next->next;
+    while (slow != NULL && fast != NULL && fast->next != NULL)
+    {
+        printf("[%p] %d\n", (void *)slow, slow->n);
+        count++;
+        slow = slow->next;
+        fast = fast->next->next;
+        if (slow == fast)
+        {
+            printf("[%p] %d\n", (void *)slow, slow->n);
+            printf("-> [%p] %d\n", (void *)fast->next, fast->next->n);
+            count++;
+            break;
+        }
+    }
 
-if (turtle == hare)
-{
-printf("[%p] %d\n", (void *)turtle, turtle->n);
-count++;
-printf("-> [%p] %d\n", (void *)hare->next, hare->next->n);
-break;
-}
-}
-if (!hare || !hare->next)
-{
-while (turtle)
-{
-printf("[%p] %d\n", (void *)turtle, turtle->n);
-count++;
-turtle = turtle->next;
-}
+    if (slow != fast)
+    {
+        while (head != NULL)
+        {
+            printf("[%p] %d\n", (void *)head, head->n);
+            count++;
+            head = head->next;
+        }
+    }
+
+    return (count);
 }
 
-return (count);
+/**
+ * main - Check the function to print a listint_t linked list safely.
+ *
+ * Return: Always 0.
+ */
+int main(void)
+{
+    listint_t *head;
+    listint_t *head2;
+    listint_t *node;
+
+    head2 = NULL;
+    add_nodeint(&head2, 0);
+    add_nodeint(&head2, 1);
+    add_nodeint(&head2, 2);
+    add_nodeint(&head2, 3);
+    add_nodeint(&head2, 4);
+    add_nodeint(&head2, 98);
+    add_nodeint(&head2, 402);
+    add_nodeint(&head2, 1024);
+    print_listint_safe(head2);
+    head = NULL;
+    node = add_nodeint(&head, 0);
+    add_nodeint(&head, 1);
+    add_nodeint(&head, 2);
+    add_nodeint(&head, 3);
+    add_nodeint(&head, 4);
+    node->next = add_nodeint(&head, 98);
+    add_nodeint(&head, 402);
+    add_nodeint(&head, 1024);
+    print_listint_safe(head);
+    return (0);
 }
 
