@@ -21,6 +21,19 @@ int n;
 struct listint_s *next;
 } listint_t;
 
+/**
+ * struct listp_s - singly linked list
+ * @p: pointers of nodes
+ * @next: points to the next node
+ *
+ * Description: singly linked list of pointers
+ */
+typedef struct listp_s
+{
+void *p;
+struct listp_s *next;
+} listp_t;
+
 /* prototype name */
 
 int _putchar(char c);

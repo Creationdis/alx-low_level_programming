@@ -1,80 +1,69 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "lists.h"
 
 /**
- * print_listint_safe - Prints a listint_t linked list.
- * @head: A pointer to the head of the listint_t list.
+ * free_listp - frees a linked list
+ * @head: head of a list.
  *
- * Return: The number of nodes in the list.
+ * Return: no return.
  */
-size_t print_listint_safe(const listint_t *head)
+void free_listp(listp_t **head)
 {
-    const listint_t *slow = head, *fast = head;
-    size_t count = 0;
+	listp_t *temp;
+	listp_t *curr;
 
-    if (head == NULL)
-        exit(98);
-
-    while (slow != NULL && fast != NULL && fast->next != NULL)
-    {
-        printf("[%p] %d\n", (void *)slow, slow->n);
-        count++;
-        slow = slow->next;
-        fast = fast->next->next;
-        if (slow == fast)
-        {
-            printf("[%p] %d\n", (void *)slow, slow->n);
-            printf("-> [%p] %d\n", (void *)fast->next, fast->next->n);
-            count++;
-            break;
-        }
-    }
-
-    if (slow != fast)
-    {
-        while (head != NULL)
-        {
-            printf("[%p] %d\n", (void *)head, head->n);
-            count++;
-            head = head->next;
-        }
-    }
-
-    return (count);
+	if (head != NULL)
+	{
+		curr = *head;
+		while ((temp = curr) != NULL)
+		{
+			curr = curr->next;
+			free(temp);
+		}
+		*head = NULL;
+	}
 }
 
 /**
- * main - Check the function to print a listint_t linked list safely.
+ * print_listint_safe - prints a linked list.
+ * @head: head of a list.
  *
- * Return: Always 0.
+ * Return: number of nodes in the list.
  */
-int main(void)
+size_t print_listint_safe(const listint_t *head)
 {
-    listint_t *head;
-    listint_t *head2;
-    listint_t *node;
+	size_t nnodes = 0;
+	listp_t *hptr, *new, *add;
 
-    head2 = NULL;
-    add_nodeint(&head2, 0);
-    add_nodeint(&head2, 1);
-    add_nodeint(&head2, 2);
-    add_nodeint(&head2, 3);
-    add_nodeint(&head2, 4);
-    add_nodeint(&head2, 98);
-    add_nodeint(&head2, 402);
-    add_nodeint(&head2, 1024);
-    print_listint_safe(head2);
-    head = NULL;
-    node = add_nodeint(&head, 0);
-    add_nodeint(&head, 1);
-    add_nodeint(&head, 2);
-    add_nodeint(&head, 3);
-    add_nodeint(&head, 4);
-    node->next = add_nodeint(&head, 98);
-    add_nodeint(&head, 402);
-    add_nodeint(&head, 1024);
-    print_listint_safe(head);
-    return (0);
+	hptr = NULL;
+	while (head != NULL)
+	{
+		new = malloc(sizeof(listp_t));
+
+		if (new == NULL)
+			exit(98);
+
+		new->p = (void *)head;
+		new->next = hptr;
+		hptr = new;
+
+		add = hptr;
+
+		while (add->next != NULL)
+		{
+			add = add->next;
+			if (head == add->p)
+			{
+				printf("-> [%p] %d\n", (void *)head, head->n);
+				free_listp(&hptr);
+				return (nnodes);
+			}
+		}
+
+		printf("[%p] %d\n", (void *)head, head->n);
+		head = head->next;
+		nnodes++;
+	}
+
+	free_listp(&hptr);
+	return (nnodes);
 }
-
