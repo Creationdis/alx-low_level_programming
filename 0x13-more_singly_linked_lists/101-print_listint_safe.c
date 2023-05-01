@@ -1,43 +1,69 @@
 #include "lists.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 /**
- * print_listint_safe - prints a listint_t linked list safely
+ * free_listp - frees a linked list of pointers.
+ * @head: pointer to the head of a list.
+ *
+ * Return: no return.
+ */
+void free_listp(listp_t **head)
+{
+	listp_t *temp;
+	listp_t *curr;
+
+	if (head != NULL)
+	{
+		curr = *head;
+		while ((temp = curr) != NULL)
+		{
+			curr = curr->next;
+			free(temp);
+		}
+		*head = NULL;
+	}
+}
+
+/**
+ * print_listint_safe - prints a listint_t linked list safely.
  * @head: pointer to the first node of the list
  *
- * Return: number of nodes in the list
+ * Return: number of nodes in the list.
  */
 size_t print_listint_safe(const listint_t *head)
 {
-size_t i = 0;
-const listint_t *temp, *arr[1024];
+	size_t i = 0;
+	listp_t *hptr, *new, *add;
 
-if (head == NULL)
-exit(98);
+	hptr = NULL;
+	while (head != NULL)
+	{
+		new = malloc(sizeof(listp_t));
 
-temp = head;
-while (temp != NULL && i < 1024)
-{
-printf("[%p] %d\n", (void *)temp, temp->n);
+		if (new == NULL)
+			exit(98);
 
-arr[i] = temp;
-i++;
+		new->p = (void *)head;
+		new->next = hptr;
+		hptr = new;
 
-temp = temp->next;
-if (temp == head)
-{
-printf("-> [%p] %d\n", (void *)temp, temp->n);
-break;
+		add = hptr;
+
+		while (add->next != NULL)
+		{
+			add = add->next;
+			if (head == add->p)
+			{
+				printf("-> [%p] %d\n", (void *)head, head->n);
+				free_listp(&hptr);
+				return (i);
+			}
+		}
+
+		printf("[%p] %d\n", (void *)head, head->n);
+		head = head->next;
+		i++;
+	}
+
+	free_listp(&hptr);
+	return (i);
 }
-}
-
-if (i >= 1024)
-{
-fprintf(stderr, "Error: list is too long\n");
-exit(98);
-}
-
-return (i);
-}
-
