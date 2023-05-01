@@ -1,41 +1,52 @@
-#include <stdlib.h>
 #include "lists.h"
 
 /**
- * free_listint_safe - Frees a listint_t linked list safely
- * @h: Pointer to the first node of the list
+ * free_listint_safe - frees a linked list safely.
+ * @head: head of a list.
  *
- * Return: The number of nodes in the list that were free
+ * Return: the size of the list that was freed.
  */
-
-size_t free_listint_safe(listint_t **h)
+size_t free_listint_safe(listint_t **head)
 {
-size_t len = 0;
-int diff;
-listint_t *temp;
+	size_t nnodes = 0;
+	listint_t *current, *next;
+	listp_t *hptr = NULL, *new = NULL;
 
-if (!h || !*h)
-return (0);
+	if (head == NULL || *head == NULL)
+		return (0);
 
-while (*h)
-{
-diff = *h - (*h)->next;
-if (diff > 0)
-{
-temp = (*h)->next;
-*h = temp;
-len++;
-}
-else
-{
-*h = NULL;
-len++;
-break;
-}
+	current = *head;
+
+	while (current != NULL)
+	{
+		next = current->next;
+
+		new = malloc(sizeof(listp_t));
+		if (new == NULL)
+		{
+			free_listp(&hptr);
+			exit(98);
+		}
+		new->ptr = (void *)current;
+		new->next = hptr;
+		hptr = new;
+
+		if (check_cycle(hptr) == 1)
+		{
+			free_listp(&hptr);
+			*head = NULL;
+			return (nnodes);
+		}
+
+		free(*head);
+		*head = NULL;
+		*head = next;
+		nnodes++;
+		current = next;
+	}
+	free_listp(&hptr);
+	*head = NULL;
+	return (nnodes);
 }
 
-*h = NULL;
-
-return (len);
-}
 
