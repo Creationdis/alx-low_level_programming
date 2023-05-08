@@ -1,7 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
+#include "main.h"
 
 /**
  * read_textfile - a function that reads a text file
@@ -11,45 +9,27 @@
  *
  * Return: 1 for success 0 for failure
  */
-
-ssize_t read_textfile(const char *filename, size_t letters) 
+ssize_t read_textfile(const char *filename, size_t letters)
 {
-if (filename == NULL) 
-{
-return (0);
-}
+	int fp;
+	ssize_t nrd, nwr;
+	char *buf;
 
-int fd = open(filename, O_RDONLY);
-if (fd == -1) 
-{
-return (0);
-}
+	if (!filename)
+		return (0);
+	fp = open(filename, O_RDONLY);
+	if (fp == -1)
+		return (0);
+	buf = malloc(sizeof(char) * (letters));
+	if (!buf)
+		return (0);
 
-char *buffer = malloc(letters);
-if (buffer == NULL) 
-{
-close(fd);
-return (0);
-}
+	nrd = read(fp, buf, letters);
+	nwr = write(STDOUT_FILENO, buf, nrd);
 
-ssize_t num_bytes_read = read(fd, buffer, letters);
-if (num_bytes_read == -1) 
-{
-free(buffer);
-close(fd);
-return(0);
-}
+	close(fp);
 
-ssize_t num_bytes_written = write(STDOUT_FILENO, buffer, num_bytes_read);
-if (num_bytes_written == -1 || num_bytes_written != num_bytes_read)
-{
-free(buffer);
-close(fd);
-return (0);
-}
+	free(buf);
 
-free(buffer);
-close(fd);
-return (num_bytes_written);
+	return (nwr);
 }
-
